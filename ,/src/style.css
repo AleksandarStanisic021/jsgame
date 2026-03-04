@@ -10,5 +10,6 @@ body{
 
 #canvas{
   border:1px solid #fff;
-  background-color: #1f1f1f;
+  background: linear-gradient(to top, #f44312 0%, #ffd1ff 100%);
+  min-height: 100vh;
 }
