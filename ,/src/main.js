@@ -5,6 +5,10 @@ import boom from "./boom.png";
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+let timeToNextRaven = 0;
+let ravenInterval = 500;
+let lastTime = 0;
+
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
@@ -25,13 +29,25 @@ class Raven {
   }
 }
 
-const raveni = new Raven();
+let ravens = [];
 
 function animate(timestamp) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  raveni.update();
-  raveni.draw();
+  let deltaTime = timestamp - lastTime;
+  lastTime = timestamp;
+  timeToNextRaven += deltaTime;
+
+  if (timeToNextRaven > ravenInterval) {
+    ravens.push(new Raven());
+    timeToNextRaven = 0;
+  }
+  [...ravens].forEach((raven) => {
+    raven.update();
+  });
+  [...ravens].forEach((raven) => {
+    raven.draw();
+  });
 
   requestAnimationFrame(animate);
 }
-animate();
+animate(0);
