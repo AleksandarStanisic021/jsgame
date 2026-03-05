@@ -8,6 +8,26 @@ const ctx = canvas.getContext("2d");
 let timeToNextRaven = 0;
 let ravenInterval = 500;
 let lastTime = 0;
+let score = 0;
+
+window.addEventListener("click", (e) => {
+  const detectPixelColor = ctx.getImageData(e.x, e.y, 1, 1);
+  console.log(detectPixelColor);
+
+  if (
+    detectPixelColor.data[0] === 255 &&
+    detectPixelColor.data[1] === 255 &&
+    detectPixelColor.data[2] === 255
+  ) {
+    score++;
+  }
+});
+
+function drawScore() {
+  ctx.fillStyle = "red";
+  ctx.font = "50px Impact";
+  ctx.fillText(`Score: ${score}`, 50, 75);
+}
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -78,6 +98,7 @@ function animate(timestamp) {
     ravens.push(new Raven());
     timeToNextRaven = 0;
   }
+  drawScore();
   [...ravens].forEach((raven) => {
     raven.update(deltaTime);
   });
@@ -85,7 +106,7 @@ function animate(timestamp) {
     raven.draw();
   });
   ravens = ravens.filter((raven) => !raven.markedForDeletion);
-  console.log(ravens);
+
   requestAnimationFrame(animate);
 }
 animate(0);
